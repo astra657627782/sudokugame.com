@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8178159531234518"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sudoku Game</title>
@@ -335,9 +333,27 @@
 
             if (correct) {
                 stopTimer();
-                messageDisplay.textContent = `Congratulations! You solved it in ${timerDisplay.textContent}!`;
-                // Optionally disable grid
-                cells.forEach(cell => cell.disabled = true);
+                const timeTaken = timerDisplay.textContent;
+                messageDisplay.textContent = `Congratulations! Level ${currentLevel} solved in ${timeTaken}!`;
+                cells.forEach(cell => cell.disabled = true); // Disable grid for solved puzzle
+
+                currentLevel++;
+                if (currentLevel <= 1000) {
+                    levelSelect.value = currentLevel; // Update the input field
+                    messageDisplay.textContent += ` Loading Level ${currentLevel}...`;
+                    // Add a small delay before loading next level for user to read message
+                    setTimeout(() => {
+                        loadGame(currentLevel);
+                        startTimer();
+                        gameStarted = true;
+                        messageDisplay.textContent = `Level ${currentLevel} started. Good luck!`;
+                    }, 2000); // 2 second delay
+                } else {
+                    messageDisplay.textContent = `Congratulations! You have completed all 1000 levels in ${timeTaken}!`;
+                    // Optionally, disable further game starts or reset level to 1
+                    startGameButton.disabled = true;
+                    newGameButton.disabled = true;
+                }
             } else {
                 messageDisplay.textContent = 'Some numbers are incorrect. Keep trying!';
             }
